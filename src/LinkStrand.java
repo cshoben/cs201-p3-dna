@@ -6,7 +6,7 @@ public class LinkStrand implements IDnaStrand {
     private int myAppends;
     private int myIndex;
     private Node myCurrent;
-    private int MyLocalIndex;
+    private int myLocalIndex;
 
     private class Node {
         public String info;
@@ -40,7 +40,7 @@ public class LinkStrand implements IDnaStrand {
         mySize = source.length();
         myIndex = 0;
         myAppends = 0;
-        MyLocalIndex = 0;
+        myLocalIndex = 0;
     }
 
 
@@ -73,9 +73,43 @@ public class LinkStrand implements IDnaStrand {
     }
 
     @Override
+	public String toString() {
+        Node currentNode = myFirst;
+        StringBuilder dnaStrand = new StringBuilder();
+        while (currentNode != null) {
+            dnaStrand.append(currentNode.info);
+            currentNode = currentNode.next;
+        }
+        return dnaStrand.toString();
+	}
+
+    @Override
     public IDnaStrand reverse() {
-        // TODO Auto-generated method stub
-        return null;
+
+        // Make the first node of the new list
+        //
+        // make a string builder initialized to the contents of the current node.
+        Node currentNode = myFirst;
+        StringBuilder firstNodeDna = new StringBuilder(currentNode.info);
+        // reverse the content of the stringbuilder 
+        firstNodeDna.reverse();
+        // place string builder reversed string as info for a new node. 
+        LinkStrand newList = new LinkStrand(firstNodeDna.toString());
+        currentNode =  currentNode.next;      
+        
+        while (currentNode != null) {
+            // make a string builder initialized to the contents of the current node.
+            StringBuilder currentNodeDna = new StringBuilder(currentNode.info);
+            // reverse the content of the stringbuilder 
+            currentNodeDna.reverse();
+            // place string builder reversed string as info for a new node. 
+            Node newNode = new Node(currentNodeDna.toString());
+            newList.mySize += newNode.info.length();
+            newNode.next = newList.myFirst;
+            newList.myFirst = newNode;
+            currentNode = currentNode.next;
+        }
+        return newList;
     }
 
     @Override
@@ -85,7 +119,43 @@ public class LinkStrand implements IDnaStrand {
 
     @Override
     public char charAt(int index) {
-        // TODO Auto-generated method stub
+        if (index > (mySize - 1)) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds. The total size is " + mySize);
+        }
+        // if the character I'm looking up is ahead of the current 
+        // index then I do not have to start from the beginning of the LinkStrand list. 
+        if (myIndex < index) {
+            while (myCurrent != null) {
+                for (int i = myLocalIndex; i < myCurrent.info.length(); i++) {
+                    if (myIndex != index) {
+                        myIndex += 1;
+                        myLocalIndex += 1;
+                    } else {
+                        char[] nodeChars = myCurrent.info.toCharArray();
+                        return nodeChars[myLocalIndex];
+                    }
+                }
+                myCurrent = myCurrent.next;
+                myLocalIndex = 0;
+            }
+        } else { // start at the beginning of the linked list to find the character
+            myIndex = 0;
+            myLocalIndex = 0;
+            myCurrent = myFirst;
+            while (myCurrent != null){
+                for (int i = 0; i < myCurrent.info.length(); i++) {
+                    if (myIndex != index) {
+                        myIndex += 1;
+                        myLocalIndex += 1;
+                    } else {
+                        char[] nodeChars = myCurrent.info.toCharArray();
+                        return nodeChars[myLocalIndex];
+                    }
+                }
+                myCurrent = myCurrent.next;
+                myLocalIndex = 0;
+            }
+        }
         return 0;
     }
     

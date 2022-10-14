@@ -32,8 +32,8 @@ public class TestStrand {
 	 * @return an IDnaStrand object for testing in this JUnit testing class.
 	 */
 	public IDnaStrand getNewStrand(String s) {
-		return new StringStrand(s);
-        //return new LinkStrand(s);
+		//return new StringStrand(s);
+        return new LinkStrand(s);
 		//return new StringBuilderStrand(s);
 	}
 
@@ -189,10 +189,12 @@ public class TestStrand {
 				IDnaStrand rev = str.reverse();
 				return rev;
 			});
+			System.out.println("strand: " + strand);
 			String rs = new StringBuilder(s).append(a).reverse().toString();
 			assertEquals(rs.length(), strand.size(), "This test checks if reverse SIZE works correctly for "
 					+ "strands with two nodes. Your code did not give the correct size() after " +
-					"reversing a strand with nodes " + s + ", " + a);
+					"reversing a strand with nodes " + s + ", " + a + 
+					" | rs.length() = " + rs.length() + " | strand.size() = " + strand.size());
 		}
 
 		// Three nodes
