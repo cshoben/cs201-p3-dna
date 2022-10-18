@@ -119,7 +119,7 @@ public class LinkStrand implements IDnaStrand {
 
     @Override
     public char charAt(int index) {
-        if (index > (mySize - 1)) {
+        if (index > (mySize - 1) || index < 0) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of bounds. The total size is " + mySize);
         }
         // if the character I'm looking up is ahead of the current 
